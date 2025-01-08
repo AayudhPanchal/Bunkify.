@@ -24,7 +24,7 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
     if (!validateForm()) return;
 
     try {
-      await axios.post('http://localhost:5000/api/subjects', {
+      await axios.post(`${import.meta.env.VITE_BACKEND}/api/subjects`, {
         Course: newSubject.course,
         CourseID: newSubject.courseID,
         Total: newSubject.total,

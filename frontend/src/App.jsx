@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SubjectCard from './Components/SubjectCard.jsx';
 import AddSubjectPopover from "./Components/AddSubjectPopover.jsx";
-import 'daisyui/dist/full.css';
+
+const BACKEND = import.meta.env.VITE_BACKEND;
+// console.log("BACKEND: ", BACKEND);
 
 function App() {
+
   const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
@@ -13,7 +16,7 @@ function App() {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/subjects');
+      const response = await axios.get(`${BACKEND}/api/subjects`);
       setSubjects(response.data);
     } catch (error) {
       console.error('Error fetching subjects:', error);
@@ -22,7 +25,7 @@ function App() {
 
   const deleteSubject = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/subjects/${id}`);
+      await axios.delete(`${BACKEND}/api/subjects/${id}`);
       setSubjects(subjects.filter(subject => subject._id !== id));
     } catch (error) {
       console.error('Error deleting subject:', error);
@@ -31,7 +34,7 @@ function App() {
 
   const updateAttendance = async (id, updatedSubject) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/subjects/${id}`, updatedSubject);
+      const response = await axios.put(`${BACKEND}/api/subjects/${id}`, updatedSubject);
       setSubjects(subjects.map(subject => (subject._id === id ? response.data : subject)));
     } catch (error) {
       console.error('Error updating attendance:', error);
