@@ -1,6 +1,6 @@
-# 🎓 bunkify. - your ultimate attendance tracker 📚
+# bunkify. - your ultimate attendance tracker 
 
-welcome to **bunkify.** the coolest way to keep track of your attendance and make sure you never miss a class (or at least know when you did 😉).
+welcome to **bunkify.** the coolest way to keep track of your attendance and make sure you never miss a class (or at least know when you did ;) ).
 
 ## what is bunkify?
 
@@ -30,4 +30,4 @@ bunkify is a sleek and minimalistic attendance tracker designed to help students
 
 we welcome contributions! if you have any ideas, suggestions, or bug reports, feel free to open an issue or submit a pull request.
 
-made with ❤️ by Aayudh Panchal
+made with <3 by Aayudh Panchal
