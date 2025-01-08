@@ -9,7 +9,9 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://bunkify-frontend.vercel.app'
+}));
 app.use(express.json());
 
 app.use('/api/subjects', subjectRoutes);
