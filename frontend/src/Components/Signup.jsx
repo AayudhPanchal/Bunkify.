@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const Signup = () => {
+const Signup = ({ onSignup }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND}/api/auth/signup`, { email, password });
-      if (response) {
-        console.log("Directing to Login")
-      }
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND}/api/auth/signup`, {
+        email,
+        password,
+      });
+
+      onSignup(response.data);
       navigate('/login');
     } catch (error) {
-      setError('Error signing up');
+      console.error('Error signing up:', error);
+      setError(error.response?.data?.message || 'Error signing up');
     }
   };
 
@@ -26,7 +30,7 @@ const Signup = () => {
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[80vw] max-w-md">
         <h2 className="text-2xl font-bold mb-6">Sign Up</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-400 mb-2">Email</label>
             <input
@@ -49,7 +53,7 @@ const Signup = () => {
           </div>
           <button type="submit" className="btn btn-success w-full mb-4">Sign Up</button>
         </form>
-        <p className="text-gray-400">Already have an account? <Link to="/login" className="text-green-500">Login</Link></p>
+        <p className="text-gray-400">Already have an account? <a href="/login" className="text-green-500">Login</a></p>
       </div>
     </div>
   );
