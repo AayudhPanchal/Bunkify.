@@ -3,6 +3,7 @@ import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { useSnackbar } from 'notistack';
 import SubjectCard from './Components/SubjectCard.jsx';
 import AddSubjectPopover from "./Components/AddSubjectPopover.jsx";
 import Login from './Components/Login.jsx';
@@ -14,6 +15,7 @@ function App() {
   const [subjects, setSubjects] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     // Fetch user data on app load
@@ -83,7 +85,7 @@ function App() {
     const updatedSubject = { ...subject, Present: subject.Present + 1, Total: subject.Total + 1 };
     updateAttendance(subject._id, updatedSubject);
   };
- 
+
   const incrementAbsent = (index) => {
     const subject = subjects[index];
     const updatedSubject = { ...subject, Total: subject.Total + 1 };
@@ -93,6 +95,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setUser(null);
+    enqueueSnackbar('Logged out successfully', { variant: 'success' });
   };
 
   if (loading) {
@@ -105,14 +108,14 @@ function App() {
         <header className="py-6 text-center flex justify-between items-center px-4">
           <h1 className="text-4xl font-extrabold text-white tracking-tight">Bunkify<span className='text-green-500'>.</span></h1>
           <div className="flex gap-4">
+            <label htmlFor="add-subject-modal" className="btn btn-success">
+              <FontAwesomeIcon icon={faPlus} /> {/* Add Subject Icon */}
+            </label>
             {user && (
               <button onClick={handleLogout} className="btn btn-danger">
                 <FontAwesomeIcon icon={faSignOutAlt} /> {/* Logout Icon */}
               </button>
             )}
-            <label htmlFor="add-subject-modal" className="btn btn-success">
-              <FontAwesomeIcon icon={faPlus} /> {/* Add Subject Icon */}
-            </label>
           </div>
         </header>
         <Routes>

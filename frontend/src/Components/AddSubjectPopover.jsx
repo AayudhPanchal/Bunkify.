@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 const AddSubjectPopover = ({ fetchSubjects }) => {
   const [newSubject, setNewSubject] = useState({ course: '', courseID: '', total: 0, present: 0 });
-  const [errors, setErrors] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -11,13 +12,23 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    if (!newSubject.course) newErrors.course = "Course name is required";
-    if (!newSubject.courseID) newErrors.courseID = "Course ID is required";
-    if (newSubject.total <= 0) newErrors.total = "Total classes must be greater than 0";
-    if (newSubject.present > newSubject.total) newErrors.present = "Present classes can't be greater than total classes";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!newSubject.course) {
+      enqueueSnackbar("Course name is required", { variant: 'error' });
+      return false;
+    }
+    if (!newSubject.courseID) {
+      enqueueSnackbar("Course ID is required", { variant: 'error' });
+      return false;
+    }
+    if (newSubject.total <= 0) {
+      enqueueSnackbar("Total classes must be greater than 0", { variant: 'error' });
+      return false;
+    }
+    if (newSubject.present > newSubject.total) {
+      enqueueSnackbar("Present classes can't be greater than total classes", { variant: 'error' });
+      return false;
+    }
+    return true;
   };
 
   const addSubject = async () => {
@@ -36,8 +47,10 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
       fetchSubjects();
       setNewSubject({ course: '', courseID: '', total: 0, present: 0 });
       document.getElementById('add-subject-modal').checked = false; // Close the modal
+      enqueueSnackbar('Subject added successfully!', { variant: 'success' });
     } catch (error) {
       console.error('Error adding subject:', error);
+      enqueueSnackbar(error.response?.data?.message || 'Error adding subject', { variant: 'error' });
     }
   };
 
@@ -56,7 +69,6 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
               value={newSubject.course}
               onChange={handleInputChange}
             />
-            {errors.course && <p className="text-red-500 text-sm">{errors.course}</p>}
             <input
               type="text"
               name="courseID"
@@ -65,7 +77,6 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
               value={newSubject.courseID}
               onChange={handleInputChange}
             />
-            {errors.courseID && <p className="text-red-500 text-sm">{errors.courseID}</p>}
             <input
               type="number"
               name="total"
@@ -74,7 +85,6 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
               value={newSubject.total}
               onChange={handleInputChange}
             />
-            {errors.total && <p className="text-red-500 text-sm">{errors.total}</p>}
             <input
               type="number"
               name="present"
@@ -83,7 +93,6 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
               value={newSubject.present}
               onChange={handleInputChange}
             />
-            {errors.present && <p className="text-red-500 text-sm">{errors.present}</p>}
           </div>
           <div className="modal-action">
             <button className="btn btn-success" onClick={addSubject}>Add</button>

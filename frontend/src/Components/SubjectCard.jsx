@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useSnackbar } from 'notistack';
 
 const SubjectCard = ({ course, courseID, total, present, incrementPresent, incrementAbsent, deleteSubject }) => {
   const [isDeletePopoverOpen, setIsDeletePopoverOpen] = useState(false);
   const absent = total - present;
   const attendancePercentage = ((present / total) * 100).toFixed(1);
+  const { enqueueSnackbar } = useSnackbar();
 
   const getProgressColor = (percentage) => {
     if (percentage < 60) return 'text-red-500';
@@ -15,8 +17,14 @@ const SubjectCard = ({ course, courseID, total, present, incrementPresent, incre
     setIsDeletePopoverOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    deleteSubject();
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteSubject();
+      enqueueSnackbar('Subject deleted successfully!', { variant: 'success' });
+    } catch (error) {
+      console.error('Error deleting subject:', error);
+      enqueueSnackbar(error.response?.data?.message || 'Error deleting subject', { variant: 'error' });
+    }
     setIsDeletePopoverOpen(false);
   };
 
