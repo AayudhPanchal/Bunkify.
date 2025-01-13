@@ -25,7 +25,7 @@ const SubjectCard = ({ course, courseID, total, present, incrementPresent, incre
   };
 
   return (
-    <div className="w-full sm:w-[90vw] lg:w-[70vw] mx-auto bg-gray-900 shadow-black shadow-md rounded-2xl">
+    <div className="w-full sm:w-[90vw] lg:w-[70vw] mx-auto bg-gray-900 shadow-black shadow-md rounded-2xl relative z-10">
       <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="mr-4">

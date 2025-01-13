@@ -7,7 +7,7 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewSubject({ ...newSubject, [name]: value });
+    setNewSubject({ ...newSubject, [name]: name === 'total' || name === 'present' ? parseInt(value) : value });
   };
 
   const validateForm = () => {
@@ -24,11 +24,14 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
     if (!validateForm()) return;
 
     try {
+      const token = localStorage.getItem('token');
       await axios.post(`${import.meta.env.VITE_BACKEND}/api/subjects`, {
         Course: newSubject.course,
         CourseID: newSubject.courseID,
         Total: newSubject.total,
         Present: newSubject.present,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
       });
       fetchSubjects();
       setNewSubject({ course: '', courseID: '', total: 0, present: 0 });
@@ -42,7 +45,7 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
     <>
       <input type="checkbox" id="add-subject-modal" className="modal-toggle" />
       <div className="modal">
-        <div className="modal-box">
+        <div className="modal-box relative z-50">
           <h3 className="font-bold text-lg">Add New Subject</h3>
           <div className="py-4">
             <input
@@ -87,6 +90,7 @@ const AddSubjectPopover = ({ fetchSubjects }) => {
             <label htmlFor="add-subject-modal" className="btn">Cancel</label>
           </div>
         </div>
+        <label htmlFor="add-subject-modal" className="modal-backdrop fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></label>
       </div>
     </>
   );

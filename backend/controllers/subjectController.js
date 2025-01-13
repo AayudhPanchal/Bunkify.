@@ -1,11 +1,11 @@
 const Subject = require('../models/Subject');
 
-// @desc    Get all subjects
+// @desc    Get all subjects for a user
 // @route   GET /api/subjects
-// @access  Public
+// @access  Private
 const getSubjects = async (req, res) => {
   try {
-    const subjects = await Subject.find();
+    const subjects = await Subject.find({ user: req.user.id });
     res.json(subjects);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -14,7 +14,7 @@ const getSubjects = async (req, res) => {
 
 // @desc    Create a new subject
 // @route   POST /api/subjects
-// @access  Public
+// @access  Private
 const createSubject = async (req, res) => {
   const { Course, CourseID, Total, Present } = req.body;
 
@@ -23,6 +23,7 @@ const createSubject = async (req, res) => {
     CourseID,
     Total,
     Present,
+    user: req.user.id,
   });
 
   try {
@@ -35,13 +36,13 @@ const createSubject = async (req, res) => {
 
 // @desc    Update attendance of a subject
 // @route   PUT /api/subjects/:id
-// @access  Public
+// @access  Private
 const updateAttendance = async (req, res) => {
   const { Total, Present } = req.body;
 
   try {
-    const updatedSubject = await Subject.findByIdAndUpdate(
-      req.params.id,
+    const updatedSubject = await Subject.findOneAndUpdate(
+      { _id: req.params.id, user: req.user.id },
       { Total, Present },
       { new: true }
     );
@@ -58,10 +59,10 @@ const updateAttendance = async (req, res) => {
 
 // @desc    Delete a subject
 // @route   DELETE /api/subjects/:id
-// @access  Public
+// @access  Private
 const deleteSubject = async (req, res) => {
   try {
-    const subject = await Subject.findByIdAndDelete(req.params.id);
+    const subject = await Subject.findOneAndDelete({ _id: req.params.id, user: req.user.id });
 
     if (subject) {
       res.json({ message: 'Subject deleted' });
