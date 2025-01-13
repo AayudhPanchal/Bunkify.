@@ -11,7 +11,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-  origin: `${process.env.VITE_FRONTEND}`
+  origin: 'https://bunkify-backend.vercel.app'
 }));
 app.use(express.json());
 
