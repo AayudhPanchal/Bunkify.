@@ -6,7 +6,7 @@ const {
   createSubject,
 } = require('../controllers/subjectController');
 const { protect } = require('../middleware/authMiddleware');
-
+ 
 const router = express.Router();
 
 router.route('/').get(protect, getSubjects).post(protect, createSubject);

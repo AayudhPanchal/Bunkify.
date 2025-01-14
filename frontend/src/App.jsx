@@ -85,7 +85,7 @@ function App() {
     const updatedSubject = { ...subject, Present: subject.Present + 1, Total: subject.Total + 1 };
     updateAttendance(subject._id, updatedSubject);
   };
-
+ 
   const incrementAbsent = (index) => {
     const subject = subjects[index];
     const updatedSubject = { ...subject, Total: subject.Total + 1 };
