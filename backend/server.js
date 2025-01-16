@@ -1,6 +1,6 @@
 const express = require('express');
-const dotenv = require('dotenv');
 const cors = require('cors');
+const dotenv = require('dotenv');
 const connectDB = require('./utils/db');
 const subjectRoutes = require('./routes/subjectRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -10,9 +10,26 @@ dotenv.config();
 connectDB();
 
 const app = express();
- 
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://bunkify-frontend.vercel.app'
+];
+
 app.use(cors({
-  origin: 'https://bunkify-frontend.vercel.app'
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  maxAge: 86400 
 }));
 
 app.use(express.json());

@@ -18,7 +18,6 @@ function App() {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    // Fetch user data on app load
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -109,11 +108,11 @@ function App() {
           <h1 className="text-4xl font-extrabold text-white tracking-tight">Bunkify<span className='text-green-500'>.</span></h1>
           <div className="flex gap-4">
             <label htmlFor="add-subject-modal" className="btn btn-success">
-              <FontAwesomeIcon icon={faPlus} /> {/* Add Subject Icon */}
+              <FontAwesomeIcon icon={faPlus} /> 
             </label>
             {user && (
               <button onClick={handleLogout} className="btn btn-danger">
-                <FontAwesomeIcon icon={faSignOutAlt} /> {/* Logout Icon */}
+                <FontAwesomeIcon icon={faSignOutAlt} />
               </button>
             )}
           </div>
